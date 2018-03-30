@@ -12,26 +12,66 @@ import com.acme.mailreader.model.Mail;
  */
 public class MailComparator implements Comparator<Mail> {
 
-	public int compare(Mail obj1, Mail obj2) {
-		if (obj1 == null || obj2 == null) {
-			return 0;
+    int LESS_IMPORTANT = 1;
+    int EQUAL = 0;
+    int MORE_IMPORTANT = -1;
+    
+	public int compare(Mail mail, Mail otherMail) {
+		
+		if (oneOfTheMailIsNull(mail, otherMail)) {
+			throw new IllegalArgumentException("Can't compare with a null value");
+			//return EQUAL;
 		}
-		if (obj1.isImportant() != obj2.isImportant()) {
-			if (obj1.isImportant() && !obj2.isImportant()) {
-				return -1;
-			} else {
-				return 1;
-			}
+		if (notTheSameImportance(mail,otherMail)) {
+			return mostImportantMail(mail,otherMail);
 		}
-		if (obj1.getStatut() != obj2.getStatut()) {
-			int comp = obj1.getStatut().ordinal()
-					- obj2.getStatut().ordinal();
-			return comp > 0 ? -1 : 1;
+		if (notTheSameStatut(mail,otherMail)) {
+			return sortByStatut(mail,otherMail);			
 		}
-		if (obj1.getSujet() != obj2.getSujet()) {
-			return obj2.getSujet().compareTo(obj1.getSujet());
+		if (notTheSameSubject(mail,otherMail)) {
+			return compareMailSubjet(mail,otherMail) ;
 		}
-		return obj2.getDate().compareTo(obj1.getDate());
+		return mail.getDate().compareTo(otherMail.getDate());
+	}
+	
+	private int mostImportantMail(Mail mail, Mail otherMail) {
+		if (mail.isImportant() && !otherMail.isImportant()) {
+			return MORE_IMPORTANT;
+		} else {
+			return LESS_IMPORTANT;
+		}
+	}
+
+	private boolean notTheSameSubject(Mail mail, Mail otherMail) {
+		if (mail.getSujet() == null || otherMail.getSujet() == null) {
+			return true;
+		}
+		return !mail.getSujet().equals(otherMail.getSujet());
+	}
+
+	private int sortByStatut(Mail mail, Mail otherMail) {
+		int compareOrder = compareOrderStatus(mail,otherMail);
+		return compareOrder < 0 ? LESS_IMPORTANT : MORE_IMPORTANT;
+	}
+	
+	private boolean notTheSameStatut(Mail mail, Mail otherMail) {
+		return mail.getStatut() != otherMail.getStatut();
+	}
+
+	private boolean notTheSameImportance(Mail mail, Mail otherMail) {
+		return mail.isImportant() != otherMail.isImportant();
+	}
+
+	private boolean oneOfTheMailIsNull(Mail mail, Mail otherMail) {
+		return mail == null || otherMail == null ;
+	}
+
+	private int compareMailSubjet(Mail mail, Mail otherMail) {
+		return mail.getSujet().compareTo(otherMail.getSujet());
+	}
+
+	private int compareOrderStatus(Mail mail, Mail otherMail) {
+		return mail.getStatut().ordinal() - otherMail.getStatut().ordinal();
 	}
 	
 

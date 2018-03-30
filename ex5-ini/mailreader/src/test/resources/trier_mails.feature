@@ -21,7 +21,7 @@ Examples:
 | true       | false	  | PAS_ENVOYE | LU      | aaaaa			| bbbbbb 		| 2017-01-01T14:03:00Z | 2017-01-01T14:03:34Z | MAIL1_AVANT |  
 | true       | true	      | PAS_ENVOYE | LU      | aaaaa			| bbbbbb 		| 2017-01-01T14:03:00Z | 2017-01-01T14:03:34Z | MAIL1_APRES |
 | true       | true	      | LU		   | LU      | aaaaa			| aaaaa 		| 2017-01-01T14:03:00Z | 2017-01-01T14:03:34Z | MAIL2_AVANT | 
-    
+| true       | true       | LU         | LU      | aaaaa            | aaaaa         | 2017-01-01T14:03:00Z | 2017-01-01T14:03:00Z | EGAUX       |  
     
 Scenario: ordre d'une liste de mails
 Given les mails :
@@ -29,12 +29,23 @@ Given les mails :
 | true       | PAS_ENVOYE 		 | aaaaa					| 2017-01-01T14:03:00Z |
 | false      | PAS_ENVOYE 		 | aaaaa					| 2017-01-01T14:03:00Z |
 | false      | LU		 		 | bbbbb					| 2016-12-01T14:03:00Z |
+| true       | PAS_ENVOYE 		 | aaaaa					| 2017-04-01T14:03:40Z |
 
-When je trie
+
+When je trie la liste
 Then la liste ordonnée doit être :
 | important  | statut   		 | sujet			  		| date                 |
 | true       | PAS_ENVOYE 		 | aaaaa					| 2017-01-01T14:03:00Z |
+| true       | PAS_ENVOYE 		 | aaaaa					| 2017-01-01T14:03:20Z |
 | false      | LU		 		 | bbbbb					| 2016-12-01T14:03:00Z | 
 | false      | PAS_ENVOYE 		 | aaaaa					| 2017-01-01T14:03:00Z |
 
+Scenario Outline: Envoie d'un mail
+Given un mail avec l'importance "<important>", le statut "<statut>", le sujet "<subject>" et la date "<date>"
+When j'envoie le mail avec importance'"<important>"
+Then l'envoie doit retourner "<result>"
 
+Examples:
+| important  | statut  | subject | date                 | result |
+| true       | LU      | aaaaa	 | 2017-01-01T14:03:34Z | [Envoi d'un mail en SMTP], Mail [important=true, sujet=aaaaa, date=2017-01-01T14:03:34Z] |
+| false      | LU      | aaaaa	 | 2017-01-01T14:03:34Z | [Envoi d'un mail en mémoire], Mail [important=false, sujet=aaaaa, date=2017-01-01T14:03:34Z] |

@@ -22,13 +22,15 @@ public class InterpreteurLignecommande {
 	 * Parse les arguments de la ligne de commande
 	 * @param args tableau d'arguments
 	 */
-	public void nouveauMail(String[] args){
+	public String nouveauMail(String[] args){
 		String sujet = args[1];
+		String result = null ;
 		Mail mail = new Mail.Builder(sujet).build();
 		try {
-			serviceMail.envoyerMail(mail);
+			result=  serviceMail.envoyerMail(mail);
 		} catch (MailInvalideException e) {
 			Logger.getGlobal().log(Level.SEVERE,e.getMessage(), e);
 		}
+		return result;
 	}
 }

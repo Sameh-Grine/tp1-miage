@@ -3,6 +3,8 @@ package com.acme.mailreader.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.acme.mailreader.domain.Mail;
 import com.acme.mailreader.utils.MailInvalideException;
 import com.acme.mailreader.utils.MailInvalideException.ErreurMail;
@@ -10,14 +12,14 @@ import com.acme.mailreader.utils.MailSender;
 
 public class MailService {
 	
-	private static final int TAILLE_MAX_SUJET = 20;
+	private static final int TAILLE_MAX_SUJET = 20;	
 	
-	//TODO : injecter par constructeur un sender
-	private MailSender sender;
+	private final MailSender sender;
 	
-	
+	@Inject
 	public MailService(MailSender sender) {
 		super();
+		this.sender = sender;
 	}
 
 	/**
@@ -39,10 +41,10 @@ public class MailService {
 	/**
 	 * operation de récupération de tous les mails de la boite
 	 * 
-	 * @return l'ensemble des mails de la boite ou une liste vide si aucun
+	 * @return l'ensemble des mails de la boite ou une liste vide si rien
 	 */
 	public List<Mail> getTousLesMails() {
-		//TODO
+		
 		return new ArrayList<Mail>();
 	}
 

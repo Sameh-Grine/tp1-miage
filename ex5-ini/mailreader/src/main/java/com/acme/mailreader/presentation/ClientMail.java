@@ -18,12 +18,13 @@ public class ClientMail {
 		production = Boolean.parseBoolean(args[0]);
 		Injector injector = Guice.createInjector(new MailReaderModule(
 				production));
-
+		String result = "" ;
 		/*
 		 * Now that we've got the injector, we can build objects.
 		 */
 		InterpreteurLignecommande cli = injector.getInstance(InterpreteurLignecommande.class);
-		cli.nouveauMail(args);
+		result = cli.nouveauMail(args);
+		System.out.println(result);
 	}
 
 	

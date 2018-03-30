@@ -7,8 +7,9 @@ public interface MailSender {
 	/**
 	 * Envoi un mail
 	 * @param mail le mail à envoyer
+	 * @return 
 	 */
-	void envoyerMail(Mail mail);
+	String envoyerMail(Mail mail);
 	
 
 }
